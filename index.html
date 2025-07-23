@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-Monev SPSE - Dengan Chart Interaktif</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* General Styling */
+        :root {
+            --primary-color: #0d47a1;
+            /* Biru Tua */
+            --secondary-color: #1976d2;
+            /* Biru Sedang */
+            --accent-color: #42a5f5;
+            /* Biru Muda */
+            --background-color: #f4f7fc;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --header-text-color: #ffffff;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary-color);
+            color: var(--header-text-color);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: var(--header-text-color);
+            text-decoration: none;
+            font-size: 1.05em;
+            transition: background-color 0.3s, padding-left 0.3s;
+        }
+
+        .sidebar-nav li a:hover,
+        .sidebar-nav li a.active {
+            background-color: var(--secondary-color);
+            border-right: 4px solid var(--accent-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex-grow: 1;
+            padding: 25px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: var(--primary-color);
+        }
+
+        h2.section-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Card Component */
+        .card {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            margin-top: 20px;
+            /* Add some space above the chart */
+        }
+
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-3-cols {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .grid-2-cols {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+
+        /* Summary Boxes (Dashboard) */
+        .summary-box {
+            background: var(--card-background);
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .summary-box .value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .summary-box .sub-value {
+            font-size: 1em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        tbody tr:hover {
+            background-color: #f1f7ff;
+        }
+
+        td.currency {
+            text-align: right;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Badges/Labels */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .badge-success {
+            background-color: var(--success-color);
+        }
+
+        .badge-warning {
+            background-color: var(--warning-color);
+            color: #333;
+        }
+
+        .badge-danger {
+            background-color: var(--danger-color);
+        }
+
+        .badge-info {
+            background-color: var(--secondary-color);
+        }
+
+        /* Buttons and Filters */
+        .button {
+            background-color: var(--primary-color);
+            color: var(--header-text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s, transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .button-download {
+            background-color: var(--success-color);
+        }
+
+        .button-download:hover {
+            background-color: #218838;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        /* Tabs */
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #777;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>e-Monev SPSE</h2>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#dashboard" class="nav-link">📊 Dashboard</a></li>
+            <li><a href="#itkp" class="nav-link active">⭐ Halaman ITKP</a></li>
+            <li><a href="#rekap" class="nav-link">📋 Halaman Rekap</a></li>
+            <li><a href="#laporan" class="nav-link">📄 Halaman Laporan</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div id="dashboard" class="page">
+            <header>
+                <h1>Dashboard Pengadaan</h1>
+                <div class="filter-group">
+                    <label for="tahun-anggaran">Tahun Anggaran:</label>
+                    <select id="tahun-anggaran">
+                        <option>2024</option>
+                        <option>2023</option>
+                        <option>2022</option>
+                    </select>
+                </div>
+            </header>
+
+            <h2 class="section-title">Proses Pengadaan Barang dan Jasa</h2>
+            <div class="grid-container grid-3-cols">
+                <div class="summary-box">
+                    <h3>Total Seluruh Paket</h3>
+                    <p class="value">1,421</p>
+                    <p class="sub-value">Pagu Anggaran: Rp 2.1 Triliun</p>
+                </div>
+                <div class="summary-box" style="border-color: var(--success-color);">
+                    <h3>Total APBD</h3>
+                    <p class="value">988</p>
+                    <p class="sub-value">Pagu Anggaran: Rp 1.3 Triliun</p>
+                </div>
+                <div class="summary-box" style="border-color: var(--warning-color);">
+                    <h3>Total APBN</h3>
+                    <p class="value">433</p>
+                    <p class="sub-value">Pagu Anggaran: Rp 800 Miliar</p>
+                </div>
+            </div>
+
+            <div class="grid-container grid-2-cols" style="margin-top: 25px;">
+                <div class="card">
+                    <div class="card-header">Grafik Kategori Pengadaan</div>
+                    <div class="chart-container">
+                        <canvas id="kategoriChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Grafik Status Penyedia</div>
+                    <div class="chart-container">
+                        <canvas id="penyediaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Grafik Jenis Pengadaan (Tender + Non Tender)</div>
+                <div class="chart-container">
+                    <canvas id="jenisPengadaanChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="itkp" class="page active">
+            <header>
+                <h1>Halaman ITKP</h1>
+            </header>
+            <div class="card">
+                <div class="tab-nav">
+                    <button class="tab-button tab-itkp active"
+                        onclick="openTab(event, 'itkp-dashboard', 'tab-itkp')">Dashboard ITKP</button>
+                    <button class="tab-button tab-itkp" onclick="openTab(event, 'itkp-warning', 'tab-itkp')">Early
+                        Warning</button>
+                    <button class="tab-button tab-itkp" onclick="openTab(event, 'itkp-ips', 'tab-itkp')">Penilaian
+                        IPS</button>
+                </div>
+
+                <div id="itkp-dashboard" class="tab-content tab-itkp active">
+                    <div class="card-header">Dashboard Indikator Kinerja dan Tata Kelola</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Indikator</th>
+                                    <th>Bobot</th>
+                                    <th>Capaian</th>
+                                    <th>Nilai</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pemanfaatan Sistem Pengadaan (SPSE & e-Katalog)</td>
+                                    <td>25%</td>
+                                    <td>92%</td>
+                                    <td>23.0</td>
+                                </tr>
+                                <tr>
+                                    <td>Kualifikasi dan Kompetensi SDM PBJ</td>
+                                    <td>20%</td>
+                                    <td>85%</td>
+                                    <td>17.0</td>
+                                </tr>
+                                <tr>
+                                    <td>Tingkat Efisiensi Harga</td>
+                                    <td>15%</td>
+                                    <td>-8.5% (Hemat)</td>
+                                    <td>12.75</td>
+                                </tr>
+                                <tr>
+                                    <td>Tingkat Kepatuhan Input RUP</td>
+                                    <td>10%</td>
+                                    <td>98%</td>
+                                    <td>9.8</td>
+                                </tr>
+                                <tr>
+                                    <td>Pelaksanaan Tender Cepat</td>
+                                    <td>10%</td>
+                                    <td>70%</td>
+                                    <td>7.0</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Nilai ITKP</strong></td>
+                                    <td><strong>100%</strong></td>
+                                    <td></td>
+                                    <td><strong>88.55 (Baik)</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="itkpDashboardChart"></canvas>
+                    </div>
+                </div>
+                <div id="itkp-warning" class="tab-content tab-itkp">
+                    <div class="card-header">Sistem Peringatan Dini (Early Warning)</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode Tender</th>
+                                    <th>Nama Paket</th>
+                                    <th>Peringatan</th>
+                                    <th>Jatuh Tempo</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T24-1011</td>
+                                    <td>Pembangunan Gedung Arsip Daerah</td>
+                                    <td>Jadwal Kritis Terlampaui</td>
+                                    <td>20 Jul 2024</td>
+                                    <td><span class="badge badge-danger">High Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td>T24-1023</td>
+                                    <td>Pengadaan Server Data Center</td>
+                                    <td>Penyedia Belum Unggah Penawaran</td>
+                                    <td>25 Jul 2024</td>
+                                    <td><span class="badge badge-warning">Medium Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td>T24-1015</td>
+                                    <td>Jasa Konsultansi Amdal Jalan Tol</td>
+                                    <td>Revisi Dokumen Belum Selesai</td>
+                                    <td>22 Jul 2024</td>
+                                    <td><span class="badge badge-warning">Medium Risk</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="itkp-ips" class="tab-content tab-itkp">
+                    <div class="card-header">Penilaian Indeks Pengelolaan SPSE (IPS)</div>
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="ipsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="rekap" class="page">
+            <header>
+                <h1>Halaman Rekapitulasi</h1>
+            </header>
+            <div class="card">
+                <div class="tab-nav">
+                    <button class="tab-button tab-rekap active"
+                        onclick="openTab(event, 'rekap-tender', 'tab-rekap')">Tender</button>
+                    <button class="tab-button tab-rekap"
+                        onclick="openTab(event, 'rekap-sirup', 'tab-rekap')">SiRUP</button>
+                    <button class="tab-button tab-rekap"
+                        onclick="openTab(event, 'rekap-katalog', 'tab-rekap')">E-Katalog</button>
+                </div>
+
+                <div id="rekap-tender" class="tab-content tab-rekap active">
+                    <h2 class="section-title">Rekap Tender Gagal</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Paket</th>
+                                    <th>OPD</th>
+                                    <th class="currency">Pagu (Rp)</th>
+                                    <th>Alasan Gagal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T23-987</td>
+                                    <td>Pembangunan Jaringan Irigasi Sekunder</td>
+                                    <td>Dinas PU & Penataan Ruang</td>
+                                    <td class="currency">2,500,000,000</td>
+                                    <td>Tidak ada penawaran yang lulus evaluasi teknis.</td>
+                                </tr>
+                                <tr>
+                                    <td>T24-121</td>
+                                    <td>Pengadaan Alat Kesehatan Lab</td>
+                                    <td>Dinas Kesehatan</td>
+                                    <td class="currency">850,000,000</td>
+                                    <td>Seluruh harga penawaran di atas HPS.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h2 class="section-title">Rekap Tender Ulang</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Paket</th>
+                                    <th>OPD</th>
+                                    <th class="currency">Pagu (Rp)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>T24-122-U</td>
+                                    <td>Pengadaan Alat Kesehatan Lab (Ulang)</td>
+                                    <td>Dinas Kesehatan</td>
+                                    <td class="currency">850,000,000</td>
+                                    <td><span class="badge badge-info">Evaluasi Penawaran</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="rekap-sirup" class="tab-content tab-rekap">
+                    <h2 class="section-title">Detail Paket SiRUP Penyedia</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode RUP</th>
+                                    <th>Nama Paket</th>
+                                    <th>Metode</th>
+                                    <th>Sumber Dana</th>
+                                    <th class="currency">Pagu (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>38190123</td>
+                                    <td>Belanja Jasa Keamanan Kantor</td>
+                                    <td>Pengadaan Langsung</td>
+                                    <td>APBD 2024</td>
+                                    <td class="currency">180,000,000</td>
+                                </tr>
+                                <tr>
+                                    <td>38190555</td>
+                                    <td>Pekerjaan Rehabilitasi Gedung Kantor</td>
+                                    <td>Tender</td>
+                                    <td>APBD 2024</td>
+                                    <td class="currency">1,200,000,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h2 class="section-title">Detail Paket SiRUP Swakelola</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kode RUP</th>
+                                    <th>Nama Paket</th>
+                                    <th>Tipe Swakelola</th>
+                                    <th>OPD Pelaksana</th>
+                                    <th class="currency">Pagu (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>38190991</td>
+                                    <td>Penyuluhan Bahaya Narkoba di Sekolah</td>
+                                    <td>Tipe II</td>
+                                    <td>Badan Narkotika Provinsi</td>
+                                    <td class="currency">75,000,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <a href="#" class="button button-download">Download Rekap SiRUP (XLSX)</a>
+                </div>
+
+                <div id="rekap-katalog" class="tab-content tab-rekap">
+                    <h2 class="section-title">Rekap Pembelian E-Katalog</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>No. Pesanan</th>
+                                    <th>Nama Produk</th>
+                                    <th>Penyedia</th>
+                                    <th>Jumlah</th>
+                                    <th class="currency">Harga Satuan</th>
+                                    <th class="currency">Total Harga</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>EKAT-24-00123</td>
+                                    <td>Laptop Bisnis Core i5 Gen 13</td>
+                                    <td>PT Solusi Teknologi</td>
+                                    <td>10 Unit</td>
+                                    <td class="currency">14,500,000</td>
+                                    <td class="currency">145,000,000</td>
+                                </tr>
+                                <tr>
+                                    <td>EKAT-24-00124</td>
+                                    <td>Sewa Mesin Fotokopi High-Speed</td>
+                                    <td>CV Lancar Jaya</td>
+                                    <td>12 Bulan</td>
+                                    <td class="currency">1,500,000</td>
+                                    <td class="currency">18,000,000</td>
+                                </tr>
+                                <tr>
+                                    <td>EKAT-24-00125</td>
+                                    <td>Catering Rapat (Paket A)</td>
+                                    <td>Dapur Ibu Catering</td>
+                                    <td>50 Pax</td>
+                                    <td class="currency">45,000</td>
+                                    <td class="currency">2,250,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <a href="#" class="button button-download">Download Rekap E-Katalog (XLSX)</a>
+                </div>
+            </div>
+        </div>
+        <div id="laporan" class="page">
+            <header>
+                <h1>Halaman Laporan</h1>
+            </header>
+            <div class="card">
+                <div class="tab-nav">
+                    <button class="tab-button tab-laporan active"
+                        onclick="openTab(event, 'laporan-pbj', 'tab-laporan')">PBJ</button>
+                    <button class="tab-button tab-laporan"
+                        onclick="openTab(event, 'laporan-penilaian', 'tab-laporan')">Penilaian Penyedia</button>
+                </div>
+
+                <div id="laporan-pbj" class="tab-content tab-laporan active">
+                    <div class="card-header">Laporan Periodik Pengadaan Barang/Jasa</div>
+                    <div class="filter-group">
+                        <label for="periode-pbj">Pilih Periode:</label>
+                        <input type="date" id="periode-pbj-start" value="2024-01-01">
+                        <span>s/d</span>
+                        <input type="date" id="periode-pbj-end" value="2024-06-30">
+                        <button class="button">Tampilkan Laporan</button>
+                    </div>
+                    <br />
+                    <a href="#" class="button button-download">Download Laporan Tender (PDF)</a>
+                    <a href="#" class="button button-download">Download Laporan Non Tender (PDF)</a>
+                </div>
+
+                <div id="laporan-penilaian" class="tab-content tab-laporan">
+                    <div class="card-header">Laporan Penilaian Kinerja Penyedia</div>
+                    <div class="filter-group">
+                        <label>Filter:</label>
+                        <input type="text" placeholder="Cari Nama Penyedia atau Paket">
+                        <select>
+                            <option>Semua Kategori</option>
+                            <option>Konstruksi</option>
+                            <option>Konsultansi</option>
+                            <option>Barang</option>
+                        </select>
+                        <button class="button">Terapkan Filter</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nama Penyedia</th>
+                                    <th>Paket Pekerjaan</th>
+                                    <th>Aspek Penilaian</th>
+                                    <th>Skor</th>
+                                    <th>Catatan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="3">PT Konstruksi Hebat</td>
+                                    <td rowspan="3">Pembangunan Jembatan Merah Putih</td>
+                                    <td>Kualitas Pekerjaan</td>
+                                    <td>90</td>
+                                    <td>Sesuai spesifikasi teknis.</td>
+                                </tr>
+                                <tr>
+                                    <td>Waktu Pelaksanaan</td>
+                                    <td>85</td>
+                                    <td>Selesai 5 hari lebih cepat.</td>
+                                </tr>
+                                <tr>
+                                    <td>Layanan</td>
+                                    <td>88</td>
+                                    <td>Kooperatif dan responsif.</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3">CV Maju Terus</td>
+                                    <td rowspan="3">Pengadaan ATK 1 Tahun</td>
+                                    <td>Kualitas Barang</td>
+                                    <td>75</td>
+                                    <td>Beberapa item tidak sesuai merk.</td>
+                                </tr>
+                                <tr>
+                                    <td>Waktu Pengiriman</td>
+                                    <td>95</td>
+                                    <td>Pengiriman selalu tepat waktu.</td>
+                                </tr>
+                                <tr>
+                                    <td>Layanan</td>
+                                    <td>80</td>
+                                    <td>Cukup baik.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+
+            const activatePage = (link) => {
+                const targetId = link.getAttribute('href').substring(1);
+                navLinks.forEach(l => l.classList.remove('active'));
+                if (link) link.classList.add('active');
+
+                pages.forEach(page => page.classList.toggle('active', page.id === targetId));
+
+                // Render charts based on active page
+                if (targetId === 'dashboard') {
+                    renderDashboardCharts();
+                } else if (targetId === 'itkp') {
+                    // Trigger click on the active tab to render its chart
+                    document.querySelector('.tab-itkp.active').click();
+                }
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    activatePage(link);
+                });
+            });
+
+            // Activate the initial page and its charts
+            activatePage(document.querySelector('.nav-link.active'));
+        });
+
+        // --- Tab Logic ---
+        function openTab(evt, tabName, tabClass) {
+            const tabContents = document.querySelectorAll(`.${tabClass}.tab-content`);
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            const tabButtons = document.querySelectorAll(`.${tabClass}.tab-button`);
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+
+            const activeTab = document.getElementById(tabName);
+            activeTab.classList.add('active');
+            evt.currentTarget.classList.add('active');
+
+            // Render chart based on the opened tab
+            if (tabName === 'itkp-dashboard') {
+                renderItkpDashboardChart();
+            } else if (tabName === 'itkp-ips') {
+                renderIpsChart();
+            }
+        }
+
+        // ======================= CHART RENDERING LOGIC =======================
+
+        const chartInstances = {};
+        function renderChart(canvasId, config) {
+            if (chartInstances[canvasId]) {
+                chartInstances[canvasId].destroy();
+            }
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            chartInstances[canvasId] = new Chart(ctx, config);
+        }
+
+        // --- Dashboard Charts ---
+        function renderDashboardCharts() {
+            renderChart('kategoriChart', {
+                type: 'pie',
+                data: {
+                    labels: ['Tender Selesai', 'Non Tender Selesai', 'Tender Proses', 'Non Tender Proses'],
+                    datasets: [{
+                        label: 'Jumlah Paket',
+                        data: [510, 750, 40, 121],
+                        backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(23, 162, 184, 0.8)', 'rgba(255, 193, 7, 0.8)', 'rgba(220, 53, 69, 0.8)'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Status Paket Pengadaan' } } }
+            });
+
+            renderChart('penyediaChart', {
+                type: 'doughnut',
+                data: {
+                    labels: ['Terverifikasi', 'Belum Terverifikasi', 'Ditolak'],
+                    datasets: [{
+                        label: 'Jumlah Penyedia',
+                        data: [3450, 670, 120],
+                        backgroundColor: ['rgba(25, 118, 210, 0.8)', 'rgba(255, 193, 7, 0.8)', 'rgba(220, 53, 69, 0.8)'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Status Verifikasi Penyedia' } } }
+            });
+
+            renderChart('jenisPengadaanChart', {
+                type: 'bar',
+                data: {
+                    labels: ['Pengadaan Barang', 'Pekerjaan Konstruksi', 'Jasa Konsultasi BU', 'Jasa Lainnya', 'Jasa Konsultasi Perorangan'],
+                    datasets: [{
+                        label: 'Jumlah Paket',
+                        data: [450, 310, 250, 351, 60],
+                        backgroundColor: 'rgba(13, 71, 161, 0.7)',
+                        borderColor: 'rgba(13, 71, 161, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Jumlah Paket Berdasarkan Jenis Pengadaan' } }, scales: { x: { beginAtZero: true } } }
+            });
+        }
+
+        // --- ITKP Charts ---
+        function renderItkpDashboardChart() {
+            renderChart('itkpDashboardChart', {
+                type: 'bar',
+                data: {
+                    labels: ['Pemanfaatan Sistem', 'Kualifikasi SDM', 'Efisiensi Harga', 'Kepatuhan RUP', 'Tender Cepat'],
+                    datasets: [{
+                        label: 'Nilai per Indikator',
+                        data: [23.0, 17.0, 12.75, 9.8, 7.0],
+                        backgroundColor: [
+                            'rgba(25, 118, 210, 0.7)',
+                            'rgba(40, 167, 69, 0.7)',
+                            'rgba(23, 162, 184, 0.7)',
+                            'rgba(255, 193, 7, 0.7)',
+                            'rgba(220, 53, 69, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(25, 118, 210, 1)',
+                            'rgba(40, 167, 69, 1)',
+                            'rgba(23, 162, 184, 1)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(220, 53, 69, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Visualisasi Nilai Indikator Kinerja (ITKP)' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Nilai' } }
+                    }
+                }
+            });
+        }
+
+        function renderIpsChart() {
+            renderChart('ipsChart', {
+                type: 'radar',
+                data: {
+                    labels: ['Kelembagaan', 'Proses PBJ', 'SDM', 'Pemanfaatan Sistem', 'Monitoring & Evaluasi'],
+                    datasets: [{
+                        label: 'Nilai IPS',
+                        data: [85, 92, 88, 95, 80],
+                        fill: true,
+                        backgroundColor: 'rgba(25, 118, 210, 0.2)',
+                        borderColor: 'rgb(25, 118, 210)',
+                        pointBackgroundColor: 'rgb(25, 118, 210)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(25, 118, 210)'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, elements: { line: { borderWidth: 3 } }, plugins: { title: { display: true, text: 'Skor Indeks Pengelolaan SPSE (IPS)' } } }
+            });
+        }
+
+    </script>
+</body>
+
+</html>
