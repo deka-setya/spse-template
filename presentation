@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi e-Monev SPSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        .slide-container {
+            width: 100%;
+            max-width: 1100px;
+            aspect-ratio: 16 / 9;
+            background-color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .slide {
+            display: none;
+        }
+        .slide.active {
+            display: flex;
+        }
+        .slide-title {
+            color: #0d47a1;
+        }
+        .screenshot {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div id="presentation-wrapper" class="w-full">
+        <div class="slide-container mx-auto rounded-lg overflow-hidden relative">
+            
+            <!-- Slide 1: Halaman Judul -->
+            <div id="slide-1" class="slide active flex-col items-center justify-center text-center p-8 bg-slate-900 text-white">
+                <h1 class="text-6xl font-extrabold text-blue-300">e-Monev SPSE</h1>
+                <p class="mt-4 text-2xl max-w-3xl text-slate-200">Transformasi Digital untuk Monitoring Pengadaan Barang/Jasa yang Real-time, Transparan, dan Akuntabel</p>
+                <div class="mt-12 text-lg text-slate-400">
+                    <p>Disajikan untuk Pimpinan [Nama Instansi Anda]</p>
+                    <p>24 Juli 2025</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Agenda Presentasi -->
+            <div id="slide-2" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-8">Agenda Presentasi</h2>
+                <ol class="list-decimal list-inside text-2xl space-y-4 text-slate-700">
+                    <li><b>Tantangan Saat Ini</b> dalam Monitoring Pengadaan</li>
+                    <li><b>Solusi yang Ditawarkan</b>: Pengenalan e-Monev SPSE</li>
+                    <li><b>Demonstrasi Fitur Unggulan</b></li>
+                    <ul class="list-disc list-inside ml-8 text-xl space-y-2 mt-2">
+                        <li>Dasbor Eksekutif: Pusat Komando Pengadaan</li>
+                        <li>Monitoring Kinerja & Risiko (ITKP)</li>
+                        <li>Analisis & Evaluasi Mendalam</li>
+                        <li>Sentralisasi & Efisiensi Pelaporan</li>
+                    </ul>
+                    <li><b>Arsitektur & Rencana Implementasi</b></li>
+                    <li><b>Diskusi & Tanya Jawab</b></li>
+                </ol>
+            </div>
+
+            <!-- Slide 3: Tantangan yang Dihadapi -->
+            <div id="slide-3" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-8">Tantangan yang Dihadapi</h2>
+                <div class="grid grid-cols-2 gap-8 w-full text-lg">
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2">📊 Data Terfragmentasi</h3>
+                        <p>Informasi pengadaan tersebar di platform SPSE, SiRUP, dan e-Katalog, menyulitkan pimpinan mendapatkan gambaran utuh.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2">⏳ Pelaporan Manual & Lambat</h3>
+                        <p>Proses rekapitulasi memakan waktu, rentan terhadap <i>human error</i>, dan seringkali terlambat.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2">👁️ Visibilitas Terbatas</h3>
+                        <p>Sulit memantau progres penyerapan anggaran, status tender, dan pencapaian ITKP secara <i>real-time</i>.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl mb-2">🚨 Risiko Tidak Terdeteksi Dini</h3>
+                        <p>Potensi masalah seperti tender gagal atau keterlambatan pelaksanaan baru diketahui saat sudah terlambat.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Solusi -->
+            <div id="slide-4" class="slide p-12 items-center">
+                <div class="w-1/2 pr-8">
+                    <h2 class="slide-title text-4xl font-bold mb-6">Solusi: Platform Terintegrasi e-Monev SPSE</h2>
+                    <p class="text-xl mb-6">Satu Platform untuk Semua Kebutuhan Monitoring Pengadaan.</p>
+                    <ul class="list-disc list-inside text-lg space-y-3">
+                        <li><b>Mengintegrasikan</b> data dari berbagai sumber.</li>
+                        <li><b>Memvisualisasikan</b> data kompleks menjadi informasi yang mudah dicerna.</li>
+                        <li><b>Menganalisis</b> kinerja dan risiko secara proaktif untuk mendukung pengambilan keputusan.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2 h-full rounded-lg flex items-center justify-center p-4 bg-slate-100">
+                    <img src="https://placehold.co/600x400/e2e8f0/334155?text=Tampilan+Penuh+Aplikasi" alt="Tampilan Penuh Aplikasi e-Monev" class="screenshot rounded-md shadow-lg">
+                </div>
+            </div>
+
+            <!-- Slide 5: Fitur 1 - Dasbor Eksekutif -->
+            <div id="slide-5" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-6">Fitur 1: Dasbor Eksekutif</h2>
+                <p class="text-xl mb-6 text-slate-600">Satu Layar untuk Gambaran Menyeluruh</p>
+                <div class="w-full h-3/5 rounded-lg flex items-center justify-center mb-4 bg-slate-100 p-4">
+                     <img src="https://placehold.co/900x450/e2e8f0/334155?text=Screenshot+Dasbor+Eksekutif" alt="Screenshot Dasbor Eksekutif" class="screenshot rounded-md shadow-lg">
+                </div>
+                <ul class="list-disc list-inside grid grid-cols-3 gap-4 text-md w-full">
+                    <li><b>Informasi Kunci Seketika:</b> Total paket, nilai pagu APBN & APBD tersaji langsung.</li>
+                    <li><b>Status Paket Real-time:</b> Chart interaktif menunjukkan progres paket secara visual.</li>
+                    <li><b>Analisis Cepat:</b> Memudahkan identifikasi jenis pengadaan yang dominan.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 6: Fitur 2 - Monitoring Kinerja & Risiko (ITKP) -->
+            <div id="slide-6" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-6">Fitur 2: Monitoring Kinerja & Risiko (ITKP)</h2>
+                <p class="text-xl mb-6 text-slate-600">Ukur dan Tingkatkan Kinerja Sepanjang Tahun</p>
+                 <div class="w-full h-3/5 rounded-lg flex items-center justify-center mb-4 bg-slate-100 p-4">
+                     <img src="https://placehold.co/900x450/e2e8f0/334155?text=Screenshot+Halaman+ITKP" alt="Screenshot Halaman ITKP" class="screenshot rounded-md shadow-lg">
+                </div>
+                <ul class="list-disc list-inside grid grid-cols-3 gap-4 text-md w-full">
+                    <li><b>Skor ITKP Real-time:</b> Pantau pencapaian 5 indikator utama ITKP setiap saat.</li>
+                    <li><b>Visualisasi Kinerja:</b> Bagan batang membantu melihat area yang kuat dan yang perlu ditingkatkan.</li>
+                    <li><b>Sistem Peringatan Dini:</b> Mendeteksi paket berisiko tinggi secara otomatis untuk intervensi cepat.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 7: Fitur 3 - Analisis & Evaluasi Mendalam -->
+            <div id="slide-7" class="slide p-12">
+                <div class="w-full">
+                    <h2 class="slide-title text-4xl font-bold mb-6">Fitur 3: Analisis & Evaluasi Mendalam</h2>
+                    <p class="text-xl mb-6 text-slate-600">Pahami "Mengapa" di Balik Angka</p>
+                    <div class="flex gap-8 h-3/4">
+                        <div class="w-1/2 flex flex-col">
+                            <h3 class="font-bold text-lg mb-2">Evaluasi Indeks Pengelolaan (IPS)</h3>
+                            <div class="flex-grow rounded-lg flex items-center justify-center bg-slate-100 p-2">
+                                <img src="https://placehold.co/450x350/e2e8f0/334155?text=Radar+Chart+Penilaian+IPS" alt="Radar Chart Penilaian IPS" class="screenshot rounded-md shadow-lg">
+                            </div>
+                            <p class="mt-2 text-sm">Menunjukkan kekuatan & kelemahan tata kelola PBJ.</p>
+                        </div>
+                        <div class="w-1/2 flex flex-col">
+                            <h3 class="font-bold text-lg mb-2">Analisis Tender Gagal</h3>
+                            <div class="flex-grow rounded-lg flex items-center justify-center bg-slate-100 p-2">
+                                <img src="https://placehold.co/450x350/e2e8f0/334155?text=Tabel+Analisis+Tender+Gagal" alt="Tabel Analisis Tender Gagal" class="screenshot rounded-md shadow-lg">
+                            </div>
+                             <p class="mt-2 text-sm">Membantu mengidentifikasi alasan kegagalan tender.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Fitur 4 - Sentralisasi & Efisiensi Pelaporan -->
+            <div id="slide-8" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-6">Fitur 4: Sentralisasi & Efisiensi Pelaporan</h2>
+                <p class="text-xl mb-6 text-slate-600">Data Terpusat, Laporan dalam Sekejap</p>
+                <div class="w-full h-3/5 rounded-lg flex items-center justify-center mb-4 bg-slate-100 p-4">
+                     <img src="https://placehold.co/900x450/e2e8f0/334155?text=Screenshot+Halaman+Rekap+%26+Laporan" alt="Screenshot Halaman Rekap & Laporan" class="screenshot rounded-md shadow-lg">
+                </div>
+                <ul class="list-disc list-inside grid grid-cols-3 gap-4 text-md w-full">
+                    <li><b>Satu Pintu untuk Semua Rekap:</b> Akses data Tender, SiRUP, dan E-Katalog di satu tempat.</li>
+                    <li><b>Laporan Standar Otomatis:</b> Hasilkan laporan periodik dengan memilih rentang tanggal.</li>
+                    <li><b>Menghemat Waktu:</b> Mengurangi waktu staf untuk tugas administratif secara drastis.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 9: Arsitektur & Teknologi -->
+            <div id="slide-9" class="slide p-12 items-center">
+                 <div class="w-1/2 pr-8">
+                    <h2 class="slide-title text-4xl font-bold mb-6">Arsitektur & Teknologi</h2>
+                    <ul class="list-disc list-inside text-lg space-y-4">
+                        <li>
+                            <h3 class="font-bold">Platform</h3>
+                            <p class="text-md ml-2">Berbasis Web, Responsif (Desktop, Tablet, Mobile).</p>
+                        </li>
+                        <li>
+                            <h3 class="font-bold">Teknologi</h3>
+                            <p class="text-md ml-2">Modern & Teruji: HTML5, CSS3 (Tailwind), JavaScript, Chart.js.</p>
+                        </li>
+                         <li>
+                            <h3 class="font-bold">Integrasi</h3>
+                            <p class="text-md ml-2">Siap terhubung dengan API dari sistem LPSE dan LKPP untuk data <i>real-time</i>.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="w-1/2 h-full rounded-lg flex items-center justify-center bg-slate-100 p-4">
+                     <img src="https://placehold.co/600x400/e2e8f0/334155?text=Diagram+Arsitektur+Sistem" alt="Diagram Arsitektur Sistem" class="screenshot rounded-md shadow-lg">
+                </div>
+            </div>
+
+            <!-- Slide 10: Rencana Implementasi -->
+            <div id="slide-10" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-8">Rencana Implementasi (Roadmap)</h2>
+                <div class="w-full flex justify-between items-center text-center">
+                    <div class="flex-1">
+                        <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto text-2xl font-bold">1</div>
+                        <h3 class="font-bold mt-2">Analisis & Kustomisasi</h3>
+                        <p class="text-sm">(1 Bulan)</p>
+                    </div>
+                    <div class="flex-1 h-1 bg-slate-300"></div>
+                    <div class="flex-1">
+                        <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto text-2xl font-bold">2</div>
+                        <h3 class="font-bold mt-2">Pengembangan & Integrasi</h3>
+                        <p class="text-sm">(2 Bulan)</p>
+                    </div>
+                     <div class="flex-1 h-1 bg-slate-300"></div>
+                    <div class="flex-1">
+                        <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto text-2xl font-bold">3</div>
+                        <h3 class="font-bold mt-2">Uji Coba (Pilot Project)</h3>
+                        <p class="text-sm">(1 Bulan)</p>
+                    </div>
+                     <div class="flex-1 h-1 bg-slate-300"></div>
+                    <div class="flex-1">
+                        <div class="bg-blue-500 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto text-2xl font-bold">4</div>
+                        <h3 class="font-bold mt-2">Pelatihan & Implementasi</h3>
+                        <p class="text-sm">(Berkelanjutan)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Ringkasan Manfaat -->
+            <div id="slide-11" class="slide flex-col p-12">
+                <h2 class="slide-title text-4xl font-bold mb-8">Ringkasan Manfaat</h2>
+                <ul class="space-y-4 text-xl w-full">
+                    <li class="flex items-center bg-green-50 p-4 rounded-lg"><span class="text-green-500 text-2xl mr-4">✅</span> Visibilitas 360°: Pimpinan mendapatkan gambaran lengkap proses pengadaan.</li>
+                    <li class="flex items-center bg-green-50 p-4 rounded-lg"><span class="text-green-500 text-2xl mr-4">✅</span> Keputusan Cepat & Akurat: Didukung oleh data <i>real-time</i> yang tervisualisasi.</li>
+                    <li class="flex items-center bg-green-50 p-4 rounded-lg"><span class="text-green-500 text-2xl mr-4">✅</span> Kinerja Terukur: Memudahkan pencapaian target ITKP dan evaluasi kinerja.</li>
+                    <li class="flex items-center bg-green-50 p-4 rounded-lg"><span class="text-green-500 text-2xl mr-4">✅</span> Efisiensi Waktu & Biaya: Mengurangi beban kerja manual secara signifikan.</li>
+                    <li class="flex items-center bg-green-50 p-4 rounded-lg"><span class="text-green-500 text-2xl mr-4">✅</span> Peningkatan Transparansi & Akuntabilitas: Semua data terekam dan mudah diakses.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 12: Terima Kasih -->
+            <div id="slide-12" class="slide flex-col items-center justify-center text-center p-8 bg-slate-900 text-white">
+                <h2 class="text-6xl font-extrabold text-blue-300">Terima Kasih</h2>
+                <p class="mt-4 text-2xl max-w-3xl text-slate-200">Kami siap untuk berdiskusi lebih lanjut dan menjawab pertanyaan Anda.</p>
+                <div class="mt-12 text-lg text-slate-400">
+                    <p class="font-bold">[Nama Anda/Tim Anda]</p>
+                    <p>[Jabatan/Departemen]</p>
+                    <p>[Email & Nomor Telepon]</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="navigation-controls mt-4 flex items-center gap-4">
+        <button id="prev-btn" class="bg-slate-700 text-white px-6 py-2 rounded-lg hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Sebelumnya</button>
+        <div id="slide-counter" class="text-lg font-semibold text-slate-600"></div>
+        <button id="next-btn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Selanjutnya</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const slideCounter = document.getElementById('slide-counter');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                currentSlide = index;
+                updateControls();
+            }
+
+            function updateControls() {
+                slideCounter.textContent = `Slide ${currentSlide + 1} dari ${slides.length}`;
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    showSlide(currentSlide - 1);
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    showSlide(currentSlide + 1);
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    nextBtn.click();
+                } else if (e.key === 'ArrowLeft') {
+                    prevBtn.click();
+                }
+            });
+
+            showSlide(0);
+        });
+    </script>
+</body>
+</html>
